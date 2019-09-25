@@ -286,11 +286,26 @@ Do the following as one long series of commands using pipes:
 
 ```{r}
 scfa_indv_qc <- scfa_indv %>%
-  rename(participant_sex = sex, participant_age = age, participant_race = `race/ethnicity`, study_semester = semester, supplement_frequency = frequency, additional_notes = notes) %>%
-  mutate(participant_id = toupper(participant_id),
+  rename(scfa_indv_qc, participant_sex = sex, participant_age = age, participant_race = `race/ethnicity`, study_semester = semester, supplement_frequency = frequency, additional_notes = notes) %>%
+  mutate(scfa_indv_qc, participant_id = toupper(participant_id),
     ht_m = ht_in / 35.274,
     wt_kg = wt_lbs / 2.205) %>%
   round(ht_m, digits = 0) %>%
+  round(wt_kg, digits = 0) %>%
+  filter(sample_wt_g > 0.1 & sample_wt_g <= 1.0) %>%
+  filter(additional_notes != "frozen >24hrs") %>%
+  mutate(scfa_indv_qc, sample_wt_kg = sample_wt_g / 1000,
+         acetate_mmol_kg = acetate_mM / sample_wt_kg,
+         butyrate_mmol_kg = butyrate_mM / sample_wt_kg,
+         propionate_mmol_kg = propionate_mM / sample_wt_kg,
+         tot_scfa_mmol_kg = acetate_mmol_kg + butyrate_mmol_kg + propionate_mmol_kg) %>%
+  round(tot_scfa_mmol_kg, digits = 2) %>%
+  select(participant_id, participant_sex, participant_age, participant_race, ht_m, wt_kg, sample_number, sample_id, study_week, study_semester, supplement_consumed, use_data, quantity_compliant, supplement_frequency, sample_wt_kg, tot_scfa_mmol_kg, additional_notes)
+  
+  
+  
+  
+  
 
   
 ```
