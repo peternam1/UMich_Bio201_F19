@@ -1,6 +1,6 @@
 ---
 title: 'Bio 201: Lab 3 graphics'
-author: "Kristi Gdanetz MacCready"
+author: "Yong Jin Nam"
 date: "9/23/2019"
 output: html_document
 ---
